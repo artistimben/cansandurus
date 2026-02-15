@@ -121,7 +121,7 @@
                                     <div class="flex-1">
                                         <p class="text-sm font-semibold text-gray-900">{{ $downtime->errorCode->name }}</p>
                                         <span
-                                            class="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{{ $downtime->errorCode->category }}</span>
+                                            class="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{{ $downtime->errorCode->category ?? 'N/A' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -198,11 +198,11 @@
                                     <td>{{ $downtime->machine->name }}</td>
                                     <td>
                                         <span class="badge 
-                                                        @if($downtime->errorCode->category === 'Mekanik') badge-red
-                                                        @elseif($downtime->errorCode->category === 'Elektrik') badge-yellow
-                                                        @else badge-blue
-                                                        @endif
-                                                    ">
+                                                                    @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
+                                                                    @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
+                                                                    @else badge-blue
+                                                                    @endif
+                                                                ">
                                             {{ $downtime->errorCode->code }}
                                         </span>
                                     </td>
