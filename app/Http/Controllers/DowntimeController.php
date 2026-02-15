@@ -234,31 +234,40 @@ class DowntimeController extends Controller
     }
 
     /**
-     * Duruşu iptal et (soft delete)
+     * Duruşu sil (kalıcı olarak)
+     * Sadece admin ve manager silebilir
      */
     public function destroy(DowntimeRecord $downtime)
     {
-        // Sadece aktif duruşlar iptal edilebilir
-        if (!$downtime->isActive()) {
+        // Yetki kontrolü
+        if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
             return redirect()
-                ->route('downtime.index')
-                ->withErrors(['error' => 'Sadece aktif duruşlar iptal edilebilir.']);
+                ->back()
+                ->withErrors(['error' => 'Bu işlem için yetkiniz yok.']);
         }
 
-        $downtime->update(['status' => 'cancelled']);
-        $downtime->delete();
+        $downtimeInfo = [
+            'machine' => $downtime->machine->name ?? 'N/A',
+            'error_code' => $downtime->errorCode->code ?? 'N/A',
+            'started_at' => $downtime->started_at->format('d.m.Y H:i'),
+            'duration' => $downtime->duration_minutes ?? 0,
+        ];
 
         // Activity log
         ActivityLog::createLog(
             userId: auth()->id(),
             action: 'delete',
-            description: 'Duruş iptal edildi',
+            description: "Duruş silindi - {$downtimeInfo['machine']} - {$downtimeInfo['error_code']} - {$downtimeInfo['duration']} dk",
             modelType: 'DowntimeRecord',
-            modelId: $downtime->id
+            modelId: $downtime->id,
+            oldValues: $downtime->toArray()
         );
 
+        // Kalıcı olarak sil
+        $downtime->forceDelete();
+
         return redirect()
-            ->route('downtime.index')
-            ->with('success', 'Duruş iptal edildi.');
+            ->back()
+            ->with('success', 'Duruş kaydı kalıcı olarak silindi.');
     }
 }

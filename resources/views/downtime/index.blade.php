@@ -80,9 +80,20 @@
                                         {{ Str::limit($downtime->notes, 80) }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('downtime.show', $downtime) }}" class="btn btn-secondary btn-sm">
-                                            👁️ Detay
-                                        </a>
+                                        <div class="flex gap-2">
+                                            <a href="{{ route('downtime.show', $downtime) }}" class="btn btn-secondary btn-sm">
+                                                👁️ Detay
+                                            </a>
+                                            @if(in_array(auth()->user()->role, ['admin', 'manager']))
+                                            <form method="POST" action="{{ route('downtime.destroy', $downtime) }}" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı kalıcı olarak silmek istediğinize emin misiniz?')">
+                                                    🗑️
+                                                </button>
+                                            </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
