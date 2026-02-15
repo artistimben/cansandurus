@@ -197,14 +197,18 @@
                                 <tr>
                                     <td>{{ $downtime->machine->name }}</td>
                                     <td>
-                                        <span class="badge 
-                                                                    @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
-                                                                    @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
-                                                                    @else badge-blue
-                                                                    @endif
-                                                                ">
-                                            {{ $downtime->errorCode->code }}
-                                        </span>
+                                        @if($downtime->errorCode)
+                                            <span class="badge 
+                                                @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
+                                                @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
+                                                @else badge-blue
+                                                @endif
+                                            ">
+                                                {{ $downtime->errorCode->code }}
+                                            </span>
+                                        @else
+                                            <span class="badge badge-gray">N/A</span>
+                                        @endif
                                     </td>
                                     <td>{{ $downtime->started_at->format('H:i') }}</td>
                                     <td>{{ $downtime->ended_at ? $downtime->ended_at->format('H:i') : '-' }}</td>
