@@ -56,7 +56,7 @@
 
                 <!-- Bitiş Tarihi/Saati -->
                 <div>
-                    <label for="ended_at" class="label">Bitiş Tarihi ve Saati *</label>
+                    <label for="ended_at" class="label">Bitiş Tarihi ve Saati (Opsiyonel)</label>
                     <input 
                         type="datetime-local" 
                         id="ended_at" 
@@ -68,7 +68,7 @@
                     @error('ended_at')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                    <p class="text-gray-500 text-sm mt-1">Bitiş zamanı başlangıç zamanından sonra olmalıdır</p>
+                    <p class="text-gray-500 text-sm mt-1">⚠️ Boş bırakırsanız duruş hala devam ediyor olarak kaydedilir</p>
                 </div>
             </div>
 
@@ -139,8 +139,9 @@
         <ul class="text-sm text-blue-800 space-y-1 list-disc list-inside">
             <li>Normal duruş: Şu anki zaman otomatik kaydedilir</li>
             <li>Geçmiş duruş: Manuel tarih/saat girerek geçmişteki duruşları kaydedebilirsiniz</li>
+            <li>Bitiş tarihi girerseniz: Tamamlanmış duruş olarak kaydedilir</li>
+            <li>Bitiş tarihi boş bırakırsanız: Geçmişten başlamış aktif duruş olarak kaydedilir</li>
             <li>Aynı makine için birden fazla aktif duruş olamaz</li>
-            <li>Geçmiş duruşlar otomatik olarak tamamlanmış şekilde kaydedilir</li>
             <li>Tüm işlemler güvenlik loglarına kaydedilmektedir</li>
         </ul>
     </div>
@@ -159,7 +160,7 @@
         if (historicalToggle.checked) {
             historicalFields.style.display = 'block';
             startedAtInput.required = true;
-            endedAtInput.required = true;
+            endedAtInput.required = false; // Bitiş tarihi opsiyonel
         } else {
             historicalFields.style.display = 'none';
             startedAtInput.required = false;
@@ -178,7 +179,7 @@
 
     // Form validation - bitiş zamanı başlangıçtan sonra mı?
     form.addEventListener('submit', function(e) {
-        if (historicalToggle.checked) {
+        if (historicalToggle.checked && endedAtInput.value) {
             const startedAt = new Date(startedAtInput.value);
             const endedAt = new Date(endedAtInput.value);
 
@@ -191,7 +192,7 @@
 
             // Gelecek tarih kontrolü
             const now = new Date();
-            if (startedAt > now || endedAt > now) {
+            if (startedAt > now || (endedAtInput.value && endedAt > now)) {
                 e.preventDefault();
                 alert('Gelecek tarihli duruş kaydedilemez!');
                 return false;

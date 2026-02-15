@@ -74,7 +74,7 @@ class DowntimeController extends Controller
         // Geçmiş kayıt ise ek validation
         if ($isHistorical) {
             $rules['started_at'] = ['required', 'date', 'before_or_equal:now'];
-            $rules['ended_at'] = ['required', 'date', 'after:started_at', 'before_or_equal:now'];
+            $rules['ended_at'] = ['nullable', 'date', 'after:started_at', 'before_or_equal:now'];
         }
 
         $validated = $request->validate($rules, $messages);
@@ -101,16 +101,23 @@ class DowntimeController extends Controller
         ];
 
         if ($isHistorical) {
-            // Geçmiş kayıt - direkt tamamlanmış olarak kaydet
+            // Geçmiş kayıt
             $startedAt = \Carbon\Carbon::parse($validated['started_at']);
-            $endedAt = \Carbon\Carbon::parse($validated['ended_at']);
-            $durationMinutes = $startedAt->diffInMinutes($endedAt);
-
             $downtimeData['started_at'] = $startedAt;
-            $downtimeData['ended_at'] = $endedAt;
-            $downtimeData['ended_by'] = auth()->id();
-            $downtimeData['duration_minutes'] = $durationMinutes;
-            $downtimeData['status'] = 'completed';
+
+            if ($request->filled('ended_at')) {
+                // Bitiş tarihi varsa - tamamlanmış duruş
+                $endedAt = \Carbon\Carbon::parse($validated['ended_at']);
+                $durationMinutes = $startedAt->diffInMinutes($endedAt);
+
+                $downtimeData['ended_at'] = $endedAt;
+                $downtimeData['ended_by'] = auth()->id();
+                $downtimeData['duration_minutes'] = $durationMinutes;
+                $downtimeData['status'] = 'completed';
+            } else {
+                // Bitiş tarihi yoksa - hala aktif duruş (geçmişten başlamış)
+                $downtimeData['status'] = 'active';
+            }
         } else {
             // Normal kayıt - şimdi başlat
             $downtimeData['started_at'] = now();
@@ -121,7 +128,9 @@ class DowntimeController extends Controller
 
         // Activity log
         $logDescription = $isHistorical
-            ? "Geçmiş duruş kaydedildi - Süre: {$downtime->duration_minutes} dakika"
+            ? ($downtime->status === 'completed'
+                ? "Geçmiş duruş kaydedildi - Süre: {$downtime->duration_minutes} dakika"
+                : "Geçmişten aktif duruş başlatıldı - {$downtime->started_at->format('d.m.Y H:i')}")
             : 'Duruş başlatıldı';
 
         ActivityLog::createLog(
@@ -134,7 +143,9 @@ class DowntimeController extends Controller
         );
 
         $successMessage = $isHistorical
-            ? "Geçmiş duruş başarıyla kaydedildi. Süre: {$downtime->duration_minutes} dakika"
+            ? ($downtime->status === 'completed'
+                ? "Geçmiş duruş başarıyla kaydedildi. Süre: {$downtime->duration_minutes} dakika"
+                : "Geçmişten aktif duruş başarıyla başlatıldı.")
             : 'Duruş başarıyla başlatıldı.';
 
         return redirect()
