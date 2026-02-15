@@ -172,6 +172,16 @@
                                     <a href="{{ route('downtime.edit', $downtime) }}" class="btn btn-secondary text-sm py-2 px-4">
                                         ✏️
                                     </a>
+                                    @if(in_array(auth()->user()->role, ['admin', 'manager']))
+                                        <form method="POST" action="{{ route('downtime.destroy', $downtime) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger text-sm py-2 px-4"
+                                                onclick="return confirm('Bu kaydı kalıcı olarak silmek istediğinize emin misiniz?')">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -203,11 +213,11 @@
                                     <td>
                                         @if($downtime->errorCode)
                                             <span class="badge 
-                                                                @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
-                                                                @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
-                                                                @else badge-blue
-                                                                @endif
-                                                            ">
+                                                                                @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
+                                                                                @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
+                                                                                @else badge-blue
+                                                                                @endif
+                                                                            ">
                                                 {{ $downtime->errorCode->code }}
                                             </span>
                                         @else

@@ -168,6 +168,15 @@
                                     <a href="{{ route('downtime.edit', $downtime) }}" class="btn btn-secondary">
                                         ✏️ Düzenle
                                     </a>
+                                    @if(in_array(auth()->user()->role, ['admin', 'manager']))
+                                    <form method="POST" action="{{ route('downtime.destroy', $downtime) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bu kaydı kalıcı olarak silmek istediğinize emin misiniz?')">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
