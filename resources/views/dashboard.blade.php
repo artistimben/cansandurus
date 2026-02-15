@@ -115,15 +115,19 @@
                             <!-- Hata Kodu -->
                             <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                                 <p class="text-xs text-gray-500 mb-2">Hata Kodu</p>
-                                <div class="flex items-start gap-2">
-                                    <span
-                                        class="px-2 py-1 bg-red-600 text-white text-sm font-bold rounded">{{ $downtime->errorCode->code }}</span>
-                                    <div class="flex-1">
-                                        <p class="text-sm font-semibold text-gray-900">{{ $downtime->errorCode->name }}</p>
+                                @if($downtime->errorCode)
+                                    <div class="flex items-start gap-2">
                                         <span
-                                            class="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{{ $downtime->errorCode->category ?? 'N/A' }}</span>
+                                            class="px-2 py-1 bg-red-600 text-white text-sm font-bold rounded">{{ $downtime->errorCode->code }}</span>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-semibold text-gray-900">{{ $downtime->errorCode->name }}</p>
+                                            <span
+                                                class="inline-block mt-1 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{{ $downtime->errorCode->category ?? 'N/A' }}</span>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                    <span class="badge badge-gray">Hata kodu bulunamadı</span>
+                                @endif
                             </div>
 
                             <!-- Zaman Bilgileri -->
@@ -199,11 +203,11 @@
                                     <td>
                                         @if($downtime->errorCode)
                                             <span class="badge 
-                                                @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
-                                                @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
-                                                @else badge-blue
-                                                @endif
-                                            ">
+                                                                @if(($downtime->errorCode->category ?? '') === 'Mekanik') badge-red
+                                                                @elseif(($downtime->errorCode->category ?? '') === 'Elektrik') badge-yellow
+                                                                @else badge-blue
+                                                                @endif
+                                                            ">
                                                 {{ $downtime->errorCode->code }}
                                             </span>
                                         @else
