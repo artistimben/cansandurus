@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.btn {
+    @apply px-4 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm;
+}
+
+.btn-primary {
+    @apply bg-primary-900 text-white hover:bg-primary-800 focus:ring-4 focus:ring-primary-300;
+}
+
+.btn-secondary {
+    @apply bg-primary-700 text-white hover:bg-primary-600 focus:ring-4 focus:ring-primary-200;
+}
+
+.btn-accent {
+    @apply bg-accent-600 text-white hover:bg-accent-700 focus:ring-4 focus:ring-accent-300;
+}
+
+.btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300;
+}
+
+.btn-success {
+    @apply bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300;
+}
+
+.btn-sm {
+    @apply px-3 py-1.5 text-sm;
+}
+
+.card {
+    @apply bg-white rounded-lg shadow-md p-6 border border-gray-200;
+}
+
+.input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors;
+}
+
+.label {
+    @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.alert {
+    @apply p-4 rounded-lg mb-4 border-l-4;
+}
+
+.alert-success {
+    @apply bg-green-50 text-green-800 border-green-500;
+}
+
+.alert-error {
+    @apply bg-red-50 text-red-800 border-red-500;
+}
+
+.alert-info {
+    @apply bg-blue-50 text-blue-800 border-blue-500;
+}
+
+.badge {
+    @apply px-2.5 py-1 text-xs font-bold rounded-full;
+}
+
+.badge-green {
+    @apply bg-green-100 text-green-800;
+}
+
+.badge-red {
+    @apply bg-red-100 text-red-800;
+}
+
+.badge-yellow {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-primary {
+    @apply bg-primary-100 text-primary-800;
+}
+
+.badge-accent {
+    @apply bg-accent-100 text-accent-800;
+}
+
+.badge-gray {
+    @apply bg-gray-100 text-gray-800;
+}
+
+.table {
+    @apply w-full text-sm text-left text-gray-700;
+}
+
+.table thead {
+    @apply bg-primary-900 text-white border-b-2 border-primary-800;
+}
+
+.table th {
+    @apply px-6 py-3 text-xs font-bold uppercase tracking-wider;
+}
+
+.table td {
+    @apply px-6 py-4 border-b border-gray-200;
+}
+
+.table tbody tr:hover {
+    @apply bg-primary-50;
+}
+
+/* Navigation */
+nav {
+    @apply bg-primary-900 text-white shadow-lg;
+}
+
+.nav-container {
+    @apply max-w-7xl mx-auto px-4 py-3 flex justify-between items-center;
+}
+
+.nav-menu {
+    @apply flex space-x-6;
+}
+
+.nav-link {
+    @apply text-gray-300 hover:text-white transition-colors duration-200 px-3 py-2 rounded-md font-medium border-b-2 border-transparent;
+}
+
+.nav-link.active {
+    @apply text-white border-accent-500;
+}
+
+.logo {
+    @apply text-2xl font-bold text-white;
+}
+
+.user-info {
+    @apply flex items-center gap-3;
+}
+
+/* Footer */
+footer {
+    @apply bg-primary-800 text-gray-300 py-4 mt-auto;
+}
+
+/* Container */
+.container {
+    @apply max-w-7xl mx-auto px-4;
+}
+
+/* Prevent horizontal scroll - aggressive fix */
+html {
+    @apply overflow-x-hidden;
+    width: 100vw;
+}
+
+body {
+    @apply overflow-x-hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+/* Ensure content stays within bounds */
+#app,
+[x-cloak],
+main,
+nav {
+    @apply max-w-full overflow-x-hidden;
+}
+
+/* Form elements should not overflow */
+input,
+select,
+textarea,
+button {
+    @apply box-border;
+    max-width: 100%;
+}
+
+/* Break long words */
+p,
+span,
+div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .table {
+        @apply text-xs;
+        font-size: 0.7rem;
+    }
+
+    .table th,
+    .table td {
+        @apply px-2 py-2;
+        white-space: nowrap;
+    }
+
+    .card {
+        @apply p-3;
+    }
+
+    .stat-number {
+        @apply text-xl;
+    }
+
+    .btn {
+        @apply text-xs px-2 py-1;
+    }
+
+    .badge {
+        @apply text-xs px-1.5 py-0.5;
+    }
+}
+
+/* Ensure tables scroll horizontally on small screens */
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded;
+}

@@ -1,0 +1,93 @@
+/* Mobile Navigation Fix - Forced CSS with !important */
+
+/* Mobile - <768px */
+@media (max-width: 767px) {
+
+    /* Hide desktop menu links */
+    nav .nav-menu {
+        display: none !important;
+    }
+
+    /* Hide desktop user info */
+    nav .hidden.md\:flex {
+        display: none !important;
+    }
+
+    /* Show mobile menu button container */
+    .md\:hidden {
+        display: block !important;
+    }
+
+    /* Mobile menu dropdown positioning and visibility - YÜKSEK Z-INDEX! */
+    #mobile-menu {
+        position: fixed !important;
+        /* absolute yerine fixed */
+        top: 70px !important;
+        /* navbar yüksekliğinden sonra */
+        right: 10px !important;
+        width: 16rem !important;
+        max-width: 90vw !important;
+        background-color: white !important;
+        border-radius: 0.5rem !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid #e5e7eb !important;
+        z-index: 999999 !important;
+        /* ÇOK YÜKSEK Z-INDEX */
+        padding: 0.5rem 0 !important;
+    }
+
+    /* Force menu items to be visible */
+    #mobile-menu:not(.hidden) {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Force menu item links to be visible with proper spacing */
+    #mobile-menu a,
+    #mobile-menu button {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        padding: 0.75rem 1rem !important;
+        color: #374151 !important;
+        font-size: 0.875rem !important;
+        transition: background-color 0.2s !important;
+        text-decoration: none !important;
+        width: 100% !important;
+    }
+
+    #mobile-menu a:hover,
+    #mobile-menu button:hover {
+        background-color: #f3f4f6 !important;
+    }
+
+    /* Menu content sections */
+    #mobile-menu>div {
+        display: block !important;
+    }
+}
+
+/* Desktop - >=768px */
+@media (min-width: 768px) {
+
+    /* Show desktop menu */
+    nav .nav-menu {
+        display: flex !important;
+    }
+
+    /* Hide mobile button */
+    button#mobile-menu-button {
+        display: none !important;
+    }
+
+    /* Show desktop user info */
+    nav .hidden.md\:flex {
+        display: flex !important;
+    }
+
+    /* Hide mobile menu on desktop */
+    #mobile-menu {
+        display: none !important;
+    }
+}
