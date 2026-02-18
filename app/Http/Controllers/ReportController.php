@@ -176,7 +176,7 @@ class ReportController extends Controller
 
         // Kategori bazında özet
         $byCategory = $downtimes->groupBy(function ($item) {
-            return $item->errorCode->category;
+            return $item->errorCode->category ?? 'Tanımsız';
         })->map(function ($items, $category) {
             return [
                 'category' => $category,
