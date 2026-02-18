@@ -19,8 +19,12 @@
                 <div>
                     <p class="stat-label">Hata Kodu</p>
                     <p class="font-bold text-lg">
-                        <span class="badge badge-red">{{ $downtime->errorCode->code }}</span>
-                        {{ $downtime->errorCode->name }}
+                        @if($downtime->errorCode)
+                            <span class="badge badge-red">{{ $downtime->errorCode->code }}</span>
+                            {{ $downtime->errorCode->name }}
+                        @else
+                            <span class="badge badge-gray">N/A</span>
+                        @endif
                     </p>
                 </div>
                 <div>
@@ -30,7 +34,8 @@
                 <div>
                     <p class="stat-label">Bitiş</p>
                     <p class="font-medium">
-                        {{ $downtime->ended_at ? $downtime->ended_at->format('d/m/Y H:i') : 'Devam ediyor...' }}</p>
+                        {{ $downtime->ended_at ? $downtime->ended_at->format('d/m/Y H:i') : 'Devam ediyor...' }}
+                    </p>
                 </div>
                 <div>
                     <p class="stat-label">Süre</p>
