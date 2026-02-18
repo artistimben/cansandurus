@@ -156,7 +156,8 @@
                                     <tr>
                                         <td><span class="badge badge-red">{{ $item['error_code']->code }}</span></td>
                                         <td class="font-medium">{{ $item['error_code']->name }}</td>
-                                        <td><span class="badge badge-gray text-xs">{{ $item['error_code']->category }}</span></td>
+                                        <td><span class="badge badge-gray text-xs">{{ $item['error_code']->category ?? 'N/A' }}</span>
+                                        </td>
                                         <td class="text-center font-bold">{{ $item['count'] }}</td>
                                         <td>
                                             <div class="flex items-center gap-2">

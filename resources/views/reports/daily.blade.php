@@ -193,27 +193,29 @@
                         </thead>
                         <tbody>
                             @foreach($byErrorCode as $item)
-                                <tr>
-                                    <td><span class="badge badge-red">{{ $item['error_code']->code }}</span></td>
-                                    <td class="font-medium">{{ $item['error_code']->name }}</td>
-                                    <td><span class="badge badge-gray">{{ $item['error_code']->category }}</span></td>
-                                    <td class="text-center font-bold">{{ $item['count'] }}</td>
-                                    <td>
-                                        <p class="font-bold text-lg">{{ number_format($item['duration']) }} dk</p>
-                                        <p class="text-xs text-gray-500">({{ number_format($item['duration'] / 60, 1) }} saat)</p>
-                                    </td>
-                                    <td>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                                <div class="bg-accent-600 h-2 rounded-full"
-                                                    style="width: {{ $stats['total_duration'] > 0 ? ($item['duration'] / $stats['total_duration']) * 100 : 0 }}%">
+                                @if($item['error_code'])
+                                    <tr>
+                                        <td><span class="badge badge-red">{{ $item['error_code']->code }}</span></td>
+                                        <td class="font-medium">{{ $item['error_code']->name }}</td>
+                                        <td><span class="badge badge-gray">{{ $item['error_code']->category ?? 'N/A' }}</span></td>
+                                        <td class="text-center font-bold">{{ $item['count'] }}</td>
+                                        <td>
+                                            <p class="font-bold text-lg">{{ number_format($item['duration']) }} dk</p>
+                                            <p class="text-xs text-gray-500">({{ number_format($item['duration'] / 60, 1) }} saat)</p>
+                                        </td>
+                                        <td>
+                                            <div class="flex items-center gap-2">
+                                                <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                                    <div class="bg-accent-600 h-2 rounded-full"
+                                                        style="width: {{ $stats['total_duration'] > 0 ? ($item['duration'] / $stats['total_duration']) * 100 : 0 }}%">
+                                                    </div>
                                                 </div>
+                                                <span
+                                                    class="text-sm font-medium">{{ $stats['total_duration'] > 0 ? number_format(($item['duration'] / $stats['total_duration']) * 100, 1) : 0 }}%</span>
                                             </div>
-                                            <span
-                                                class="text-sm font-medium">{{ $stats['total_duration'] > 0 ? number_format(($item['duration'] / $stats['total_duration']) * 100, 1) : 0 }}%</span>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -265,7 +267,7 @@
                             );
                         }
                     @endif
-                            });
+                                    });
         </script>
     @endif
 @endsection
