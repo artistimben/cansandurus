@@ -63,9 +63,13 @@
                                         <span class="badge badge-primary">{{ $downtime->machine->code }}</span>
                                     </td>
                                     <td>
-                                        <p class="font-medium text-sm">{{ $downtime->errorCode->code }}</p>
-                                        <p class="text-xs text-gray-600">{{ $downtime->errorCode->name }}</p>
-                                        <span class="badge badge-gray text-xs mt-1">{{ $downtime->errorCode->category }}</span>
+                                        @if($downtime->errorCode)
+                                            <p class="font-medium text-sm">{{ $downtime->errorCode->code }}</p>
+                                            <p class="text-xs text-gray-600">{{ $downtime->errorCode->name }}</p>
+                                            <span class="badge badge-gray text-xs mt-1">{{ $downtime->errorCode->category ?? 'N/A' }}</span>
+                                        @else
+                                            <span class="badge badge-gray text-xs">N/A</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span
@@ -126,9 +130,13 @@
                                 <div class="flex items-center justify-between p-3 bg-white rounded-lg">
                                     <div>
                                         <p class="text-sm text-gray-600">Hata Kodu</p>
-                                        <p class="font-bold text-gray-900">{{ $downtime->errorCode->code }} -
-                                            {{ $downtime->errorCode->name }}</p>
-                                        <span class="badge badge-blue text-xs mt-1">{{ $downtime->errorCode->category }}</span>
+                                        @if($downtime->errorCode)
+                                            <p class="font-bold text-gray-900">{{ $downtime->errorCode->code }} -
+                                                {{ $downtime->errorCode->name }}</p>
+                                            <span class="badge badge-blue text-xs mt-1">{{ $downtime->errorCode->category ?? 'N/A' }}</span>
+                                        @else
+                                            <p class="font-bold text-gray-500">N/A</p>
+                                        @endif
                                     </div>
                                 </div>
 
