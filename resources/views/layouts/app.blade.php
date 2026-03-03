@@ -42,6 +42,11 @@
                                 </a>
                             @endif
 
+                            <a href="{{ route('fault-reports.index') }}"
+                                class="nav-link {{ request()->routeIs('fault-reports.*') ? 'active' : '' }}">
+                                🔧 Arızalar
+                            </a>
+
                             @if(auth()->user()->role === 'manager' || auth()->user()->role === 'admin')
                                 <a href="{{ route('reports.index') }}"
                                     class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
@@ -110,6 +115,12 @@
                                                 <span class="font-medium">Duruşlar</span>
                                             </a>
                                         @endif
+
+                                        <a href="{{ route('fault-reports.index') }}"
+                                            class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                                            <span class="text-lg">🔧</span>
+                                            <span class="font-medium">Arıza Bildirimleri</span>
+                                        </a>
 
                                         @if(auth()->user()->role === 'manager' || auth()->user()->role === 'admin')
                                             <a href="{{ route('reports.index') }}"

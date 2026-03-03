@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MachineController;
 use App\Http\Controllers\Admin\ErrorCodeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\FaultReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +52,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/downtime/{downtime}', [DowntimeController::class, 'update'])->name('downtime.update');
         Route::post('/downtime/{downtime}/complete', [DowntimeController::class, 'complete'])->name('downtime.complete');
         Route::delete('/downtime/{downtime}', [DowntimeController::class, 'destroy'])->name('downtime.destroy');
+    });
+
+    // Fault Report Routes - Duruşsuz Arıza Bildirimleri (Operator, Maintenance, Admin, Manager)
+    Route::middleware(['role:operator,maintenance,admin,manager'])->group(function () {
+        Route::get('/fault-reports', [FaultReportController::class, 'index'])->name('fault-reports.index');
+        Route::get('/fault-reports/create', [FaultReportController::class, 'create'])->name('fault-reports.create');
+        Route::post('/fault-reports', [FaultReportController::class, 'store'])->name('fault-reports.store');
+        Route::get('/fault-reports/{faultReport}', [FaultReportController::class, 'show'])->name('fault-reports.show');
+        Route::get('/fault-reports/{faultReport}/edit', [FaultReportController::class, 'edit'])->name('fault-reports.edit');
+        Route::put('/fault-reports/{faultReport}', [FaultReportController::class, 'update'])->name('fault-reports.update');
+        Route::post('/fault-reports/{faultReport}/resolve', [FaultReportController::class, 'resolve'])->name('fault-reports.resolve');
+        Route::delete('/fault-reports/{faultReport}', [FaultReportController::class, 'destroy'])->name('fault-reports.destroy');
     });
 
     // Report Routes - Manager, Admin
