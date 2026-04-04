@@ -18,12 +18,12 @@
         <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8">
                 <a href="?status=active"
-                    class="border-transparent {{ request('status') === 'active' || !request('status') ? 'border-accent-500 text-accent-600 border-b-2' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                    🔴 Aktif Duruşlar ({{ $activeDowntimes->count() }})
+                    class="border-transparent {{ $status === 'active' ? 'border-accent-500 text-accent-600 border-b-2' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    🔴 Aktif Duruşlar ({{ $activeCount }})
                 </a>
                 <a href="?status=completed"
-                    class="border-transparent {{ request('status') === 'completed' ? 'border-accent-500 text-accent-600 border-b-2' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                    ✅ Tamamlanan Duruşlar
+                    class="border-transparent {{ $status === 'completed' ? 'border-accent-500 text-accent-600 border-b-2' : 'text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    ✅ Tamamlanan Duruşlar ({{ $completedCount }})
                 </a>
             </nav>
         </div>
@@ -52,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse(\App\Models\DowntimeRecord::with(['machine', 'errorCode'])->where('status', 'completed')->latest()->paginate(20) as $downtime)
+                            @forelse($downtimes as $downtime)
                                 <tr>
                                     <td>
                                         <p class="font-medium">{{ $downtime->started_at->format('d.m.Y') }}</p>
@@ -110,12 +110,16 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="mt-4">
+                    {{ $downtimes->links() }}
+                </div>
             </div>
         @else
             <!-- Aktif Duruşlar -->
-            @if($activeDowntimes->count() > 0)
+            @if($downtimes->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @foreach($activeDowntimes as $downtime)
+                    @foreach($downtimes as $downtime)
                         <div class="card border-l-4 border-red-500 bg-red-50">
                             <div class="flex justify-between items-start mb-4">
                                 <div>
@@ -189,6 +193,10 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+                
+                <div class="mt-4">
+                    {{ $downtimes->links() }}
                 </div>
             @else
                 <div class="card text-center py-16 bg-green-50 border-green-200">

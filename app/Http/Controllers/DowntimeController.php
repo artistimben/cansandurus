@@ -18,14 +18,28 @@ class DowntimeController extends Controller
     /**
      * Aktif duruşları listele
      */
-    public function index()
+    public function index(Request $request)
     {
-        $activeDowntimes = DowntimeRecord::with(['machine', 'errorCode', 'startedBy'])
-            ->active()
-            ->latest()
-            ->paginate(20);
+        $status = $request->get('status', 'active');
+        
+        $activeCount = DowntimeRecord::active()->count();
+        $completedCount = DowntimeRecord::completed()->count();
 
-        return view('downtime.index', compact('activeDowntimes'));
+        if ($status === 'completed') {
+            $downtimes = DowntimeRecord::with(['machine', 'errorCode', 'startedBy', 'endedBy'])
+                ->completed()
+                ->latest()
+                ->paginate(20)
+                ->withQueryString();
+        } else {
+            $downtimes = DowntimeRecord::with(['machine', 'errorCode', 'startedBy'])
+                ->active()
+                ->latest()
+                ->paginate(20)
+                ->withQueryString();
+        }
+
+        return view('downtime.index', compact('downtimes', 'activeCount', 'completedCount', 'status'));
     }
 
     /**
