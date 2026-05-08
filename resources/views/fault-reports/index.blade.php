@@ -81,7 +81,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tarih / Saat</th>
+                            <th>Zaman Aralığı</th>
                             <th>Makine</th>
                             <th>Arıza Başlığı</th>
                             <th>Öncelik</th>
@@ -93,9 +93,29 @@
                     <tbody>
                         @forelse($faultReports as $report)
                             <tr class="{{ $report->priority === 'critical' && !$report->isResolved() ? 'bg-red-50' : '' }}">
-                                <td>
-                                    <p class="font-medium text-sm">{{ $report->reported_at->format('d.m.Y') }}</p>
-                                    <p class="text-xs text-gray-500">{{ $report->reported_at->format('H:i') }}</p>
+                                <td class="whitespace-nowrap">
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-1 text-sm font-medium text-gray-900">
+                                            <span class="text-xs text-gray-400 w-4">🕒</span>
+                                            {{ $report->reported_at->format('d.m.Y H:i') }}
+                                        </div>
+                                        @if($report->resolved_at)
+                                            <div class="flex items-center gap-1 text-sm font-medium text-green-600">
+                                                <span class="text-xs text-gray-400 w-4">🏁</span>
+                                                {{ $report->resolved_at->format('d.m.Y H:i') }}
+                                            </div>
+                                            @if($report->getResolutionMinutes())
+                                                <div class="text-[10px] text-gray-400 ml-5">
+                                                    ⏱️ {{ $report->getResolutionMinutes() }} dk sürdü
+                                                </div>
+                                            @endif
+                                        @else
+                                            <div class="flex items-center gap-1 text-sm font-medium text-amber-600">
+                                                <span class="text-xs text-gray-400 w-4">⏳</span>
+                                                Devam Ediyor...
+                                            </div>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="badge badge-primary">{{ $report->machine->code ?? 'N/A' }}</span>

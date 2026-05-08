@@ -73,7 +73,7 @@
                         <span>{{ $faultReport->reportedBy->name ?? 'N/A' }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Bildirim Zamanı:</span>
+                        <span class="text-gray-500">Başlangıç Zamanı:</span>
                         <span>{{ $faultReport->reported_at->format('d.m.Y H:i') }}</span>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             <span>{{ $faultReport->resolvedBy->name ?? 'N/A' }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Çözüm Zamanı:</span>
+                            <span class="text-gray-500">Bitiş Zamanı:</span>
                             <span>{{ $faultReport->resolved_at->format('d.m.Y H:i') }}</span>
                         </div>
                         @if($faultReport->getResolutionMinutes() !== null)

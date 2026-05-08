@@ -185,6 +185,50 @@
             </div>
         </div>
 
+        <hr class="border-t-2 border-gray-200">
+
+        <!-- Grup 3: Arıza Bildirimleri (Duruşsuz) -->
+        <div class="space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-amber-100 rounded-lg">
+                    <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Duruşsuz Arıza Takibi</h2>
+                    <p class="text-sm text-gray-600">Üretimi durdurmayan ancak kaydedilmesi gereken arıza bildirimleri</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card hover:shadow-xl transition-shadow bg-amber-50 border-amber-200">
+                    <div class="flex items-start gap-4">
+                        <div class="p-4 bg-amber-100 rounded-xl">
+                            <span class="text-3xl">⚠️</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Arıza Kayıtları Listesi</h3>
+                            <p class="text-gray-700 text-sm mb-4">
+                                Tüm arıza bildirimlerini durumuna, önceliğine ve makinesine göre filtreleyerek listeleyin.
+                            </p>
+                            <a href="{{ route('fault-reports.index') }}" class="btn btn-warning">
+                                Arızaları Listele →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-dashed border-2 border-gray-300 flex flex-col justify-center items-center text-center p-8">
+                    <div class="text-4xl mb-3">📈</div>
+                    <h3 class="text-lg font-bold text-gray-500">Çok Yakında</h3>
+                    <p class="text-gray-400 text-sm">Arıza frekansı ve MTTR (Ortalama Onarım Süresi) analizleri eklenecek.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Bilgilendirme -->
         <div class="card bg-blue-50 border-blue-200">
             <div class="flex items-start gap-4">

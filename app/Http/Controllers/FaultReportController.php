@@ -74,7 +74,8 @@ class FaultReportController extends Controller
             'description' => ['nullable', 'string', 'max:2000'],
             'priority' => ['required', 'in:low,medium,high,critical'],
             'production_continued' => ['boolean'],
-            'reported_at' => ['nullable', 'date', 'before_or_equal:now'],
+            'reported_at' => ['nullable', 'date'],
+            'resolved_at' => ['nullable', 'date', 'after_or_equal:reported_at'],
         ], [
             'machine_id.required' => 'Lütfen bir makine seçin.',
             'machine_id.exists' => 'Geçersiz makine.',
@@ -82,19 +83,23 @@ class FaultReportController extends Controller
             'title.max' => 'Başlık en fazla 200 karakter olabilir.',
             'priority.required' => 'Öncelik seviyesi seçiniz.',
             'priority.in' => 'Geçersiz öncelik.',
-            'reported_at.before_or_equal' => 'Tarih gelecekte olamaz.',
+            'resolved_at.after_or_equal' => 'Bitiş zamanı başlangıç zamanından önce olamaz.',
         ]);
+
+        $status = $request->filled('resolved_at') ? 'resolved' : 'open';
 
         $faultReport = FaultReport::create([
             'machine_id' => $validated['machine_id'],
             'error_code_id' => $validated['error_code_id'] ?? null,
             'reported_by' => auth()->id(),
             'reported_at' => $validated['reported_at'] ?? now(),
+            'resolved_at' => $validated['resolved_at'] ?? null,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'priority' => $validated['priority'],
             'production_continued' => $request->boolean('production_continued', true),
-            'status' => 'open',
+            'status' => $status,
+            'resolved_by' => $status === 'resolved' ? auth()->id() : null,
         ]);
 
         ActivityLog::createLog(
@@ -151,14 +156,21 @@ class FaultReportController extends Controller
             'priority' => ['required', 'in:low,medium,high,critical'],
             'status' => ['required', 'in:open,in_progress,resolved'],
             'production_continued' => ['boolean'],
+            'reported_at' => ['nullable', 'date'],
+            'resolved_at' => ['nullable', 'date', 'after_or_equal:reported_at'],
+        ], [
+            'resolved_at.after_or_equal' => 'Bitiş zamanı başlangıç zamanından önce olamaz.',
         ]);
 
         $oldValues = $faultReport->toArray();
 
-        // Durum "resolved" oluyorsa çözüm bilgilerini kaydet
-        if ($validated['status'] === 'resolved' && !$faultReport->isResolved()) {
+        // Durum "resolved" oluyorsa veya resolved_at girildiyse çözüm bilgilerini kaydet
+        if (($validated['status'] === 'resolved' || !empty($validated['resolved_at'])) && !$faultReport->isResolved()) {
             $validated['resolved_by'] = auth()->id();
-            $validated['resolved_at'] = now();
+            if (empty($validated['resolved_at'])) {
+                $validated['resolved_at'] = now();
+            }
+            $validated['status'] = 'resolved';
         }
 
         $faultReport->update($validated);
